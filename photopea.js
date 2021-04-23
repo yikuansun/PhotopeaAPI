@@ -1,5 +1,8 @@
 var Photopea = {
     initEmbed: async function(elem_to_append_to, environment) {
+        // Example usage: Photopea.initEmbed(document.body);
+        // environment is optional.
+        // This will not work on Chrome if third-party cookies and site data are blocked.
         var iframe = document.createElement("iframe");
         iframe.style.border = "0";
         iframe.style.width = "100%";
@@ -20,6 +23,7 @@ var Photopea = {
     },
     runScript: async function(contentWindow, script) {
         // Example usage: Photopea.runScript(myEmbed.contentWindow, "alert('hi')").then((x) => console.log(x));
+        // If in a plugin, use window.parent as contentWindow.
         var myPromise = new Promise(function(resolve, reject) {
             var outputarray = [];
             var messageHandle = function(e) {
