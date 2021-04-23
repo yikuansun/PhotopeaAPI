@@ -35,5 +35,18 @@ var Photopea = {
         contentWindow.postMessage(script, "*");
         var returnedMessage = await myPromise;
         return returnedMessage;
+    },
+    addBinaryAsset: async function(contentWindow, asset) {
+        var myPromise = new Promise(function(resolve, reject) {
+            var messageHandle = function(e) {
+                if (e.source == contentWindow && e.data == "done") {
+                    resolve(true);
+                    window.removeEventListener("message", messageHandle);
+                };
+            };
+            window.addEventListener("message", messageHandle);
+        });
+        contentWindow.postMessage(asset, "*");
+        return await myPromise;
     }
 };
