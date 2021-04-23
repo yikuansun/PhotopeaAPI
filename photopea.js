@@ -2,6 +2,8 @@ var Photopea = {
     initEmbed: async function(elem_to_append_to, environment) {
         var iframe = document.createElement("iframe");
         iframe.style.border = "0";
+        iframe.style.width = "100%";
+        iframe.style.height = "100%";
         if (environment) iframe.src = "https://www.photopea.com#" + encodeURI(environment);
         else iframe.src = "https://www.photopea.com";
         var myPromise = new Promise(function(resolve, reject) {
