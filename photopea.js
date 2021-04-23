@@ -6,16 +6,16 @@ var Photopea = {
         iframe.style.height = "100%";
         if (environment) iframe.src = "https://www.photopea.com#" + encodeURI(environment);
         else iframe.src = "https://www.photopea.com";
+        elem_to_append_to.appendChild(iframe);
         var myPromise = new Promise(function(resolve, reject) {
             var messageHandle = function(e) {
-                //if (/*e.source == iframe.contentWindow && */e.data == "done") {
+                //if (e.source == iframe.contentWindow && e.data == "done") {
                     resolve(iframe);
                     window.removeEventListener("message", messageHandle);
                 //}
             };
             window.addEventListener("message", messageHandle);
         });
-        elem_to_append_to.appendChild(iframe);
         return await myPromise;
     },
     runScript: async function(contentWindow, script) {
