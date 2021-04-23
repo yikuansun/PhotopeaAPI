@@ -19,10 +19,14 @@ var Photopea = {
     runScript: async function(contentWindow, script) {
         // Example usage: Photopea.runScript(myEmbed.contentWindow, "alert('hi')").then((x) => console.log(x));
         var myPromise = new Promise(function(resolve, reject) {
+            var outputarray = [];
             var messageHandle = function(e) {
                 if (e.source == contentWindow) {
-                    resolve(e.data);
-                    window.removeEventListener("message", messageHandle);
+                    outputarray.push(e.data);
+                    if (e.data == "done") {
+                        resolve(outputarray);
+                        window.removeEventListener("message", messageHandle);
+                    }
                 }
             };
             window.addEventListener("message", messageHandle);
