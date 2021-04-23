@@ -25,3 +25,10 @@ Example usage: `Photopea.initEmbed(document.body).then((frame) => { ... });`
 Returns an array containing all data outputted by Photopea before `"done"`. <br />
 Example usage: `Photopea.runScript(myEmbed.contentWindow, "app.echoToOE('Hello World!');").then((out_data) => console.log(out_data[0]));` <br />
 For [plugins](https://www.photopea.com/api/plugins), use `window.parent` for `contentWindow`.
+
+### `addBinaryAsset(contentWindow, asset)`
+> Add `asset` to the Photopea process running in `contentwindow`. `asset` can be psd, svg, jpg, ... fonts, brushes, ...
+
+Returns `true`. <br />
+`asset` should be an ArrayBuffer. <br />
+For [plugins](https://www.photopea.com/api/plugins), use `window.parent` for `contentWindow`.
