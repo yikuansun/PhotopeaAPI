@@ -39,9 +39,20 @@ Photopea.createEmbed(container).then(async (pea) => {
 ```
 `container` is the parent DOM element and should be a `div` with a set width and height.
 ### Methods
+These are methods for objects of the Photopea class, created with the constructors above. These are all Promises, so be sure to use `.then()` or `await`.
 #### `async runScript(script)`
 - `script` (string): the [script](https://www.photopea.com/learn/scripts) to run in Photopea.
 - Returns: an array containing all of the scripts outputs, ending with `"done"`.
 #### `async loadAsset(asset)`
 - `asset` (ArrayBuffer): a buffer of the asset to load in Photopea.
 - Returns: `[ "done" ]`.
+#### `async openFromURL(url, asSmart=true)`
+- `url` (string): The URL of the image/psd file to open.
+- `asSmart` (boolean): whether to open the image as a layer. Set to `false` if you are opening an image or psd file in a new document.
+- Returns: `[ "done" ]`.
+#### `async exportImage(type="png")`
+- `type` (string): export image filetype. Can be png or jpg.
+- Returns: a Blob of the exported image. To get the image URL, use `URL.createObjectURL`.
+
+## Demo
+See [dist/test.html](./dist/test.html)
