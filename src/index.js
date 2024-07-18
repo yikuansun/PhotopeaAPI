@@ -49,7 +49,6 @@ export default class Photopea {
 
             this.contentWindow.postMessage(script, "*");
         });
-        await this._pause();
         return await waitForMessage;
     }
 
@@ -70,7 +69,6 @@ export default class Photopea {
 
             this.contentWindow.postMessage(asset, "*");
         });
-        await this._pause();
         return await waitForMessage;        
     }
 
@@ -83,11 +81,10 @@ export default class Photopea {
         while (layerCountNew == layerCountOld || layerCountNew == "done") {
             layerCountNew = (await this.runScript(`app.echoToOE(${asSmart?"app.activeDocument.layers.length":"app.documents.length"})`))[0];
         }
-        await this._pause();
         return [ "done" ];
     }
 
-    async _pause(ms=100) {
+    async _pause(ms=50) {
         return await new Promise((res, rej) => {
             setTimeout(() => { res(); }, ms);
         });
