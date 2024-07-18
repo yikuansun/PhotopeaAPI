@@ -4,8 +4,19 @@
         <script src="./photopea.min.js"></script>
     </head>
     <body>
+        <div id="container" style="width: 800px; height: 400px;"></div>
         <script>
-            console.log(Photopea.sayHello());
+            let container = document.getElementById("container");
+            Photopea.initEmbed(container, {
+                "files": [ 
+                    "https://www.photopea.com/api/img2/pug.png"
+                ],
+                "environment": {
+                    
+                }
+            }).then(async (pea) => {
+                console.log(pea);
+            });
         </script>
     </body>
 </html>
