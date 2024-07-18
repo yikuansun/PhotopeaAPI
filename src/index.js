@@ -84,7 +84,7 @@ export default class Photopea {
         return [ "done" ];
     }
 
-    async _pause(ms=50) {
+    async _pause(ms=10) {
         return await new Promise((res, rej) => {
             setTimeout(() => { res(); }, ms);
         });
