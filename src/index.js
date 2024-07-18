@@ -81,6 +81,19 @@ export default class Photopea {
         return [ "done" ];
     }
 
+    async exportImage(type="png") {
+        await this._pause();
+        let buffer = "done";
+        while (buffer == "done") {
+            let data = await this.runScript(`app.activeDocument.saveToOE("${type}");`);
+            buffer = data[0];
+        }
+        return new Blob([ buffer ], {
+            type: "image/" + type,
+        });
+
+    }
+
     async _pause(ms=10) {
         return await new Promise((res, rej) => {
             setTimeout(() => { res(); }, ms);

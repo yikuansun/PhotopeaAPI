@@ -16,10 +16,15 @@
                 await pea.runScript(`app.activeDocument.activeLayer.blendMode = "lddg";`);
                 await pea.openFromURL("https://www.photopea.com/api/img2/pug.png", true);
                 await pea.runScript(`app.activeDocument.activeLayer.blendMode = "scrn";`);
+                await pea.runScript(`app.activeDocument.activeLayer.translate(20, 20);`);
                 output = await pea.runScript(`
                     app.echoToOE("hello world 2");
                 `);
                 console.log(output)
+                let finalImage = await pea.exportImage();
+                let img = new Image();
+                img.src = URL.createObjectURL(finalImage);
+                document.body.appendChild(img);
             });
         </script>
     </body>
