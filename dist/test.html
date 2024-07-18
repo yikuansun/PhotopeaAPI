@@ -7,7 +7,7 @@
         <div id="container" style="width: 800px; height: 400px;"></div>
         <script>
             let container = document.getElementById("container");
-            Photopea.initEmbed(container).then(async (pea) => {
+            Photopea.createEmbed(container).then(async (pea) => {
                 let output = await pea.runScript(`
                     app.echoToOE("hello world");
                 `);

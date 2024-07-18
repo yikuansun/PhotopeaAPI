@@ -1,6 +1,6 @@
 export default class Photopea {
 
-    static async initEmbed(parentElement, config) {
+    static async createEmbed(parentElement, config) {
         let _config = "";
         if (typeof(config) == "object") _config = JSON.stringify(config);
         else if (typeof(config) == "string") _config = config;
