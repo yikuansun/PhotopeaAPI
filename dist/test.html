@@ -15,7 +15,10 @@
                     
                 }
             }).then(async (pea) => {
-                console.log(pea);
+                let output = await pea.runScript(`
+                    app.echoToOE("hello world");
+                `);
+                console.log(output)
             });
         </script>
     </body>

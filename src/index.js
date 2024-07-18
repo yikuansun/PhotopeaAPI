@@ -15,8 +15,8 @@ export default class Photopea {
         else frame.src = "https://www.photopea.com";
         parentElement.appendChild(frame);
         let waitForInit = new Promise(function(res, rej) {
-            let messageHandle = function(e) {
-                if (e.data == "done") {
+            let messageHandle = (e) => {
+                if (e.source == frame.contentWindow && e.data == "done") {
                     let pea = new Photopea(frame.contentWindow);
                     window.removeEventListener("message", messageHandle);
                     res(pea);
@@ -30,5 +30,24 @@ export default class Photopea {
     contentWindow;
     constructor(contentWindow) {
         this.contentWindow = contentWindow;
+    }
+
+    async runScript(script) {
+        let waitForMessage = new Promise((res, rej) => {
+            let outputs = [];
+            let messageHandle = (e) => {
+                if (e.source == this.contentWindow) {
+                    outputs.push(e.data);
+                    if (e.data == "done") {
+                        window.removeEventListener("message", messageHandle);
+                        res(outputs);
+                    }
+                }
+            };
+            window.addEventListener("message", messageHandle);
+
+            this.contentWindow.postMessage(script, "*");
+        });
+        return await waitForMessage;
     }
 }
