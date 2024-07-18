@@ -50,4 +50,23 @@ export default class Photopea {
         });
         return await waitForMessage;
     }
+
+    async loadAsset(asset) {
+        let waitForMessage = new Promise((res, rej) => {
+            let outputs = [];
+            let messageHandle = (e) => {
+                if (e.source == this.contentWindow) {
+                    outputs.push(e.data);
+                    if (e.data == "done") {
+                        window.removeEventListener("message", messageHandle);
+                        res(outputs);
+                    }
+                }
+            };
+            window.addEventListener("message", messageHandle);
+
+            this.contentWindow.postMessage(asset, "*");
+        });
+        return await waitForMessage;        
+    }
 }
