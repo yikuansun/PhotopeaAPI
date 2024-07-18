@@ -33,6 +33,7 @@ export default class Photopea {
     }
 
     async runScript(script) {
+        await this._pause();
         let waitForMessage = new Promise((res, rej) => {
             let outputs = [];
             let messageHandle = (e) => {
@@ -48,10 +49,12 @@ export default class Photopea {
 
             this.contentWindow.postMessage(script, "*");
         });
+        await this._pause();
         return await waitForMessage;
     }
 
     async loadAsset(asset) {
+        await this._pause();
         let waitForMessage = new Promise((res, rej) => {
             let outputs = [];
             let messageHandle = (e) => {
@@ -67,6 +70,26 @@ export default class Photopea {
 
             this.contentWindow.postMessage(asset, "*");
         });
+        await this._pause();
         return await waitForMessage;        
+    }
+
+    async openFromURL(url, asSmart=true) {
+        await this._pause();
+        let layerCountOld = "done";
+        while (layerCountOld == "done") layerCountOld = (await this.runScript(`app.echoToOE(${asSmart?"app.activeDocument.layers.length":"app.documents.length"})`))[0];
+        let layerCountNew = layerCountOld;
+        await this.runScript(`app.open("${url}", null, ${asSmart});`);
+        while (layerCountNew == layerCountOld || layerCountNew == "done") {
+            layerCountNew = (await this.runScript(`app.echoToOE(${asSmart?"app.activeDocument.layers.length":"app.documents.length"})`))[0];
+        }
+        await this._pause();
+        return [ "done" ];
+    }
+
+    async _pause(ms=100) {
+        return await new Promise((res, rej) => {
+            setTimeout(() => { res(); }, ms);
+        });
     }
 }

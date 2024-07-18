@@ -7,16 +7,17 @@
         <div id="container" style="width: 800px; height: 400px;"></div>
         <script>
             let container = document.getElementById("container");
-            Photopea.initEmbed(container, {
-                "files": [ 
-                    "https://www.photopea.com/api/img2/pug.png"
-                ],
-                "environment": {
-                    
-                }
-            }).then(async (pea) => {
+            Photopea.initEmbed(container).then(async (pea) => {
                 let output = await pea.runScript(`
                     app.echoToOE("hello world");
+                `);
+                console.log(output)
+                await pea.openFromURL("https://www.photopea.com/api/img2/pug.png", false);
+                await pea.runScript(`app.activeDocument.activeLayer.blendMode = "lddg";`);
+                await pea.openFromURL("https://www.photopea.com/api/img2/pug.png", true);
+                await pea.runScript(`app.activeDocument.activeLayer.blendMode = "scrn";`);
+                output = await pea.runScript(`
+                    app.echoToOE("hello world 2");
                 `);
                 console.log(output)
             });
