@@ -3,7 +3,6 @@
     "version": "0.0.1",
     "description": "JS wrapper for the Photopea API.",
     "type": "module",
-    "main": "src/index.js",
     "browser": "src/index.js",
     "dependencies": {
         "acorn": "^8.12.1",
