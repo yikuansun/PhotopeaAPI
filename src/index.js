@@ -1,5 +1,7 @@
-export default class Photopea {
-
+/**
+ * Interact with a Photopea window from an outer environment or a plugin.
+ */
+class Photopea {
     /**
      * Creates an iframe with a Photopea window.
      * @param {HTMLDivElement} parentElement The container element of the embed. Should be an empty div with set width & height
@@ -131,3 +133,5 @@ export default class Photopea {
         });
     }
 }
+
+export default Photopea;
