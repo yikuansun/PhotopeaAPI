@@ -4,6 +4,7 @@
   "description": "JS wrapper for the Photopea API.",
   "type": "module",
   "main": "src/index.js",
+  "browser": "src/index.js",
   "dependencies": {
     "acorn": "^8.12.1",
     "acorn-import-attributes": "^1.9.5",
@@ -99,6 +100,10 @@
   "keywords": [
     "photopea"
   ],
-  "author": "Yikuan Sun",
+  "repository": "github:yikuansun/PhotopeaAPI",
+  "author": {
+    "name": "Yikuan Sun",
+    "url": "https://yikuansun.gtihub.io"
+  },
   "license": "MIT"
 }
