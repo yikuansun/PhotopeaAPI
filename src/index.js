@@ -1,5 +1,11 @@
 export default class Photopea {
 
+    /**
+     * Creates an iframe with a Photopea window.
+     * @param {HTMLDivElement} parentElement The container element of the embed. Should be an empty div with set width & height
+     * @param {Object} config Photopea configuration object (can be Object or JSON string). See https://www.photopea.com/api/
+     * @returns {Photopea} a new Photopea object, whose contentWindow is that of the new iframe.
+     */
     static async createEmbed(parentElement, config) {
         let _config = "";
         if (typeof(config) == "object") _config = JSON.stringify(config);
@@ -25,10 +31,19 @@ export default class Photopea {
     }
 
     contentWindow;
+    /**
+     * Create a new Photopea object.
+     * @param {Window} contentWindow The Window where Photopea is running. For embeds, this should be the iframe's contentWindow. For plugins, this should be window.parent
+     */
     constructor(contentWindow) {
         this.contentWindow = contentWindow;
     }
 
+    /**
+     * Execute a script within the Photopea window. See https://www.photopea.com/learn/scripts
+     * @param {string} script The JavaScript to execute.
+     * @returns {Array} an array containing all outputs from Photopea until "done"
+     */
     async runScript(script) {
         await this._pause();
         let waitForMessage = new Promise((res, rej) => {
@@ -49,6 +64,11 @@ export default class Photopea {
         return await waitForMessage;
     }
 
+    /**
+     * Load an asset in Photopea.
+     * @param {ArrayBuffer} asset the brush, font, style, image etc. to be loaded in Photopea.
+     * @returns {Array} [ "done" ]
+     */
     async loadAsset(asset) {
         await this._pause();
         let waitForMessage = new Promise((res, rej) => {
@@ -69,6 +89,12 @@ export default class Photopea {
         return await waitForMessage;        
     }
 
+    /**
+     * Open an image in the Photopea window.
+     * @param {string} url The URI of the image (png, svg, jpg, etc.). Ensure that the content can be fetched cross-origin.
+     * @param {boolean} asSmart Whether to add the image to the current document. Should be set to false for the image to be opened in a new document, or if there are no documents already open.
+     * @returns {Array} [ "done" ]
+     */
     async openFromURL(url, asSmart=true) {
         await this._pause();
         let layerCountOld = "done";
@@ -81,6 +107,11 @@ export default class Photopea {
         return [ "done" ];
     }
 
+    /**
+     * Export the document as a png or jpg file.
+     * @param {string} type png or jpg
+     * @returns {Blob} the exported image. To get it as a URL, use URL.createObjectURL
+     */
     async exportImage(type="png") {
         await this._pause();
         let buffer = "done";
