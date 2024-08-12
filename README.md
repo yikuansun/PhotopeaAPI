@@ -3,19 +3,19 @@ A JS-based wrapper for the [Photopea API](https://www.photopea.com/api/).
 
 ## Installation
 The easiest way to install photopea.js is through a CDN.
-```
-<script src="https://cdn.jsdelivr.net/npm/photopea@0.0.1/dist/photopea.min.js"></script>
+```html
+<script src="https://cdn.jsdelivr.net/npm/photopea@1.0.2/dist/photopea.min.js"></script>
 ```
 You can also download [`photopea.min.js`](./dist/photopea.min.js) and host it yourself:
-```
+```html
 <script src="./photopea.min.js"></script>
 ```
 If you're using a Node framework, like Webpack, Rollup, or Vite, simply install with npm:
-```
+```bash
 npm install photopea
 ```
 You can then import the module in your code:
-```
+```js
 import Photopea from "photopea";
 ```
 
@@ -23,11 +23,11 @@ import Photopea from "photopea";
 `Photopea` is a class with methods that can interact with any instance of Photopea.
 ### Constructors
 For plugins, use window.parent as the Photopea content window:
-```
+```js
 let pea = new Photopea(window.parent);
 ```
 To create a new Photopea embed, use `Photopea.createEmbed`:
-```
+```js
 Photopea.createEmbed(container).then(async (pea) => {
     // photopea initialized
     // pea is the new Photopea object
