@@ -17,7 +17,7 @@ class Photopea {
         frame.style.width = "100%";
         frame.style.height = "100%";
         if (config) frame.src = `https://www.photopea.com/#${encodeURI(_config)}`;
-        else frame.src = `https://www.photopea.com/#`;
+        else frame.src = "https://www.photopea.com/#";
         parentElement.appendChild(frame);
         let waitForInit = new Promise(function(res, rej) {
             let messageHandle = (e) => {
