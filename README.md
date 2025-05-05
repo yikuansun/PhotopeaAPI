@@ -4,7 +4,7 @@ A JS-based wrapper for the [Photopea API](https://www.photopea.com/api/).
 ## Installation
 The easiest way to install photopea.js is through a CDN.
 ```html
-<script src="https://cdn.jsdelivr.net/npm/photopea@1.0.2/dist/photopea.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photopea@1.1.1/dist/photopea.min.js"></script>
 ```
 You can also download [`photopea.min.js`](./dist/photopea.min.js) and host it yourself:
 ```html
