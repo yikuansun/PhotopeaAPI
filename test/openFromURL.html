@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="../dist/photopea.min.js"></script>
+    </head>
+    <body>
+        <div id="container" style="width: 960px; height: 540px;"></div>
+        <button onclick="addAsNewDoc()">Add Pug as New Document</button>
+        <button onclick="addAsNewLayer()">Add Pug as New Layer</button>
+        <script>
+            const container = document.getElementById("container");
+            let pea;
+            Photopea.createEmbed(container).then((p) => {
+                pea = p;
+                pea.runScript("alert('photopea loaded')");
+            });
+
+            async function addAsNewDoc() {
+                await pea.openFromURL("https://www.photopea.com/api/img2/pug.png", false);
+                await pea.runScript("app.activeDocument.activeLayer.opacity = 50");
+                // we use layer opacity change to test synchronicity. If all goes well, the newly-opened layer should have opacity 50.
+            }
+            
+            async function addAsNewLayer() {
+                await pea.openFromURL("https://www.photopea.com/api/img2/pug.png", true);
+                await pea.runScript("app.activeDocument.activeLayer.opacity = 50");
+                // we use layer opacity change to test synchronicity. If all goes well, the newly-opened layer should have opacity 50.
+                // Make sure layer can also be opened within a group.
+            }
+        </script>
+    </body>
+</html>

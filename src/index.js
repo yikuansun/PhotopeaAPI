@@ -99,12 +99,23 @@ class Photopea {
      */
     async openFromURL(url, asSmart=true) {
         await this._pause();
-        let layerCountOld = "done";
-        while (layerCountOld == "done") layerCountOld = (await this.runScript(`app.echoToOE(${asSmart?"app.activeDocument.layers.length":"app.documents.length"})`))[0];
-        let layerCountNew = layerCountOld;
-        await this.runScript(`app.open("${url}", null, ${asSmart});`);
-        while (layerCountNew == layerCountOld || layerCountNew == "done") {
-            layerCountNew = (await this.runScript(`app.echoToOE(${asSmart?"app.activeDocument.layers.length":"app.documents.length"})`))[0];
+        if (asSmart) {
+            let layerCountOld = "done";
+            while (layerCountOld == "done") layerCountOld = (await this.runScript(`app.echoToOE(app.activeDocument.activeLayer.parent.layers.length)`))[0];
+            let layerCountNew = layerCountOld;
+            await this.runScript(`app.open("${url}", null, true);`);
+            while (layerCountNew == layerCountOld || layerCountNew == "done") {
+                layerCountNew = (await this.runScript(`app.echoToOE(app.activeDocument.activeLayer.parent.layers.length)`))[0];
+            }
+        }
+        else {
+            let documentsCountOld = "done";
+            while (documentsCountOld == "done") documentsCountOld = (await this.runScript(`app.echoToOE(app.documents.length)`))[0];
+            let documentsCountNew = documentsCountOld;
+            await this.runScript(`app.open("${url}", null, false);`);
+            while (documentsCountNew == documentsCountOld || documentsCountNew == "done") {
+                documentsCountNew = (await this.runScript(`app.echoToOE(app.documents.length)`))[0];
+            }
         }
         return [ "done" ];
     }
