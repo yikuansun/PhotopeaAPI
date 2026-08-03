@@ -18,6 +18,11 @@ You can then import the module in your code:
 ```js
 import Photopea from "photopea";
 ```
+TypeScript declarations are included with the package. `runScript` accepts an
+optional result type when the script output is known:
+```ts
+const outputs = await pea.runScript<number>("app.echoToOE(app.documents.length)");
+```
 
 ## Usage
 `Photopea` is a class with methods that can interact with any instance of Photopea.

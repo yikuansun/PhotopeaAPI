@@ -10,29 +10,34 @@ class Photopea {
      */
     static async createEmbed(parentElement, config) {
         let _config = "";
-        if (typeof(config) == "object") _config = JSON.stringify(config);
-        else if (typeof(config) == "string") _config = config;
-        let frame = document.createElement("iframe");
+        if (typeof (config) == "object")
+            _config = JSON.stringify(config);
+        else if (typeof (config) == "string")
+            _config = config;
+        const frame = document.createElement("iframe");
         frame.style.border = "0";
         frame.style.width = "100%";
         frame.style.height = "100%";
-        if (config) frame.src = `https://www.photopea.com/#${encodeURI(_config)}`;
-        else frame.src = "https://www.photopea.com/#";
+        if (config)
+            frame.src = `https://www.photopea.com/#${encodeURI(_config)}`;
+        else
+            frame.src = "https://www.photopea.com/#";
         parentElement.appendChild(frame);
-        let waitForInit = new Promise(function(res, rej) {
-            let messageHandle = (e) => {
+        const contentWindow = frame.contentWindow;
+        if (!contentWindow)
+            throw new Error("Unable to access the Photopea iframe window.");
+        const waitForInit = new Promise((resolve) => {
+            const messageHandle = (e) => {
                 if (e.source == frame.contentWindow && e.data == "done") {
-                    let pea = new Photopea(frame.contentWindow);
+                    const pea = new Photopea(contentWindow);
                     window.removeEventListener("message", messageHandle);
-                    res(pea);
+                    resolve(pea);
                 }
             };
             window.addEventListener("message", messageHandle);
         });
-        return await waitForInit;
+        return waitForInit;
     }
-
-    contentWindow;
     /**
      * Create a new Photopea object.
      * @param {Window} contentWindow The Window where Photopea is running. For embeds, this should be the iframe's contentWindow. For plugins, this should be window.parent
@@ -40,7 +45,6 @@ class Photopea {
     constructor(contentWindow) {
         this.contentWindow = contentWindow;
     }
-
     /**
      * Execute a script within the Photopea window. See https://www.photopea.com/learn/scripts
      * @param {string} script The JavaScript to execute.
@@ -48,24 +52,22 @@ class Photopea {
      */
     async runScript(script) {
         await this._pause();
-        let waitForMessage = new Promise((res, rej) => {
-            let outputs = [];
-            let messageHandle = (e) => {
+        const waitForMessage = new Promise((resolve) => {
+            const outputs = [];
+            const messageHandle = (e) => {
                 if (e.source == this.contentWindow) {
                     outputs.push(e.data);
                     if (e.data == "done") {
                         window.removeEventListener("message", messageHandle);
-                        res(outputs);
+                        resolve(outputs);
                     }
                 }
             };
             window.addEventListener("message", messageHandle);
-
             this.contentWindow.postMessage(script, "*");
         });
-        return await waitForMessage;
+        return waitForMessage;
     }
-
     /**
      * Load an asset in Photopea.
      * @param {ArrayBuffer} asset the brush, font, style, image etc. to be loaded in Photopea.
@@ -73,35 +75,34 @@ class Photopea {
      */
     async loadAsset(asset) {
         await this._pause();
-        let waitForMessage = new Promise((res, rej) => {
-            let outputs = [];
-            let messageHandle = (e) => {
+        const waitForMessage = new Promise((resolve) => {
+            const outputs = [];
+            const messageHandle = (e) => {
                 if (e.source == this.contentWindow) {
                     outputs.push(e.data);
                     if (e.data == "done") {
                         window.removeEventListener("message", messageHandle);
-                        res(outputs);
+                        resolve(outputs);
                     }
                 }
             };
             window.addEventListener("message", messageHandle);
-
             this.contentWindow.postMessage(asset, "*");
         });
-        return await waitForMessage;        
+        return waitForMessage;
     }
-
     /**
      * Open an image in the Photopea window.
      * @param {string} url The URI of the image (png, svg, jpg, etc.). Ensure that the content can be fetched cross-origin.
      * @param {boolean} asSmart Whether to add the image to the current document. Should be set to false for the image to be opened in a new document, or if there are no documents already open.
-     * @returns {Promise<["done"]} [ "done" ]
+     * @returns {Promise<["done"]>} [ "done" ]
      */
-    async openFromURL(url, asSmart=true) {
+    async openFromURL(url, asSmart = true) {
         await this._pause();
         if (asSmart) {
             let layerCountOld = "done";
-            while (layerCountOld == "done") layerCountOld = (await this.runScript(`app.echoToOE(app.activeDocument.activeLayer.parent.layers.length)`))[0];
+            while (layerCountOld == "done")
+                layerCountOld = (await this.runScript(`app.echoToOE(app.activeDocument.activeLayer.parent.layers.length)`))[0];
             let layerCountNew = layerCountOld;
             await this.runScript(`app.open("${url}", null, true);`);
             while (layerCountNew == layerCountOld || layerCountNew == "done") {
@@ -110,39 +111,37 @@ class Photopea {
         }
         else {
             let documentsCountOld = "done";
-            while (documentsCountOld == "done") documentsCountOld = (await this.runScript(`app.echoToOE(app.documents.length)`))[0];
+            while (documentsCountOld == "done")
+                documentsCountOld = (await this.runScript(`app.echoToOE(app.documents.length)`))[0];
             let documentsCountNew = documentsCountOld;
             await this.runScript(`app.open("${url}", null, false);`);
             while (documentsCountNew == documentsCountOld || documentsCountNew == "done") {
                 documentsCountNew = (await this.runScript(`app.echoToOE(app.documents.length)`))[0];
             }
         }
-        return [ "done" ];
+        return ["done"];
     }
-
     /**
      * Export the document as a png or jpg file.
      * @param {string} type png or jpg
      * @returns {Promise<Blob>} the exported image. To get it as a URL, use URL.createObjectURL
      */
-    async exportImage(type="png") {
+    async exportImage(type = "png") {
         await this._pause();
         let buffer = "done";
         while (buffer == "done") {
-            let data = await this.runScript(`app.activeDocument.saveToOE("${type}");`);
+            const data = await this.runScript(`app.activeDocument.saveToOE("${type}");`);
             buffer = data[0];
         }
-        return new Blob([ buffer ], {
+        return new Blob([buffer], {
             type: "image/" + type,
         });
-
     }
-
-    async _pause(ms=10) {
-        return await new Promise((res, rej) => {
-            setTimeout(() => { res(); }, ms);
+    _pause(ms = 10) {
+        return new Promise((resolve) => {
+            setTimeout(resolve, ms);
         });
     }
 }
-
 export default Photopea;
+//# sourceMappingURL=index.js.map
