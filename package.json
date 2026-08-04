@@ -4,7 +4,8 @@
     "description": "JS wrapper for the Photopea API.",
     "type": "module",
     "main": "src/index.js",
-    "browser": "src/index.js",
+    "browser": "dist/photopea.min.js",
+    "types": "src/index.d.ts",
     "scripts": {
         "build": "rollup -c"
     },
@@ -14,7 +15,7 @@
     "repository": "github:yikuansun/PhotopeaAPI",
     "author": {
         "name": "Yikuan Sun",
-        "url": "https://yikuansun.gtihub.io"
+        "url": "https://yikuansun.github.io"
     },
     "license": "MIT",
     "devDependencies": {
